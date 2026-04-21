@@ -34,21 +34,28 @@ public class FantasyCalculator {
         result += calculateYellowCard(yellowCard);
         result += calculateRedCard(redCard);
         result += calculateMatchResult(matchResult);
-        if (position.equals(GOALKEEPER_STRING)) {
-            result += calculateGoals(goals);
-            result += calculateAssists(assists);
-            result += calculateSaves(saves);
-            result += calculateGoalsReceived(goalsAgainst);
-        } else if (position.equals(DEFENCE_STRING)) {
-            result += calculateGoalsReceived(goalsAgainst);
-            result += calculateGoals(goals);
-            result += calculateAssists(assists);
-        } else if (position.equals(MIDFIELDER_STRING)) {
-            result += calculateGoals(goals);
-            result += calculateAssists(assists);
-        } else if (position.equals(FORWARD_STRING)) {
-            result += calculateGoalsForward(goals);
-            result += calculateAssistsForward(assists);
+        switch (position) {
+            case GOALKEEPER_STRING:
+                result += calculateGoals(goals);
+                result += calculateAssists(assists);
+                result += calculateSaves(saves);
+                result += calculateGoalsReceived(goalsAgainst);
+                break;
+            case DEFENCE_STRING:
+                result += calculateGoalsReceived(goalsAgainst);
+                result += calculateGoals(goals);
+                result += calculateAssists(assists);
+                break;
+            case MIDFIELDER_STRING:
+                result += calculateGoals(goals);
+                result += calculateAssists(assists);
+                break;
+            case FORWARD_STRING:
+                result += calculateGoalsForward(goals);
+                result += calculateAssistsForward(assists);
+                break;
+            default:
+                break;
         }
 
         return result;
@@ -86,12 +93,16 @@ public class FantasyCalculator {
         final int POINTS_FOR_LOSING_MATCH = 0;
         int matchResultPoints;
 
-        if (matchResult == MATCH_WON) {
-            matchResultPoints = POINTS_FOR_WINNING_MATCH;
-        } else if (matchResult == MATCH_DRAW) {
-            matchResultPoints = POINTS_FOR_DRAWING_MATCH;
-        } else {
-            matchResultPoints = POINTS_FOR_LOSING_MATCH;
+        switch (matchResult) {
+            case MATCH_WON:
+                matchResultPoints = POINTS_FOR_WINNING_MATCH;
+                break;
+            case MATCH_DRAW:
+                matchResultPoints = POINTS_FOR_DRAWING_MATCH;
+                break;
+            default:
+                matchResultPoints = POINTS_FOR_LOSING_MATCH;
+                break;
         }
         return matchResultPoints;
     }
@@ -100,7 +111,7 @@ public class FantasyCalculator {
         final int POINTS_FOR_RED_CARD = -5;
         int redCardPointsObtained = 0;
 
-        if (redCard == true) {
+        if (redCard) {
             redCardPointsObtained = POINTS_FOR_RED_CARD;
         }        
         
@@ -111,7 +122,7 @@ public class FantasyCalculator {
         final int POINTS_FOR_YELLOW_CARD = -3;
         int yellowCardPointsObtained = 0;
 
-        if (yellowCard == true) {
+        if (yellowCard) {
             yellowCardPointsObtained = POINTS_FOR_YELLOW_CARD;
         }        
         
@@ -124,14 +135,19 @@ public class FantasyCalculator {
         final int POINTS_FOR_TWO_GOALS_RECEIVED = 1;
         int pointsForGoalsReceived;
 
-        if (goalsAgainst == 0) {
-            pointsForGoalsReceived = POINTS_FOR_ZERO_GOALS_RECEIVED;
-        } else if (goalsAgainst == 1) {
-            pointsForGoalsReceived = POINTS_FOR_ONE_GOAL_RECEIVED;
-        } else if (goalsAgainst == 2) {
-            pointsForGoalsReceived = POINTS_FOR_TWO_GOALS_RECEIVED;
-        } else {
-            pointsForGoalsReceived = 0;
+        switch (goalsAgainst) {
+            case 0:
+                pointsForGoalsReceived = POINTS_FOR_ZERO_GOALS_RECEIVED;
+                break;
+            case 1:
+                pointsForGoalsReceived = POINTS_FOR_ONE_GOAL_RECEIVED;
+                break;
+            case 2:
+                pointsForGoalsReceived = POINTS_FOR_TWO_GOALS_RECEIVED;
+                break;
+            default:
+                pointsForGoalsReceived = 0;
+                break;
         }
         return pointsForGoalsReceived;
     }
