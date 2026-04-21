@@ -14,51 +14,65 @@ import es.dam.codeoptimization.PlayerStats;
 public class FantasyCalculator {
 
     public static int calculatePoints(PlayerStats stats) {
-        int result = 0;
-        int minutes = stats.minutes;
-        int goals = stats.goals;
-        int assists = stats.assists;
-        boolean yellowCard = stats.yellowCard;
-        boolean redCard = stats.redCard;
-        int saves = stats.saves;
-        int goalsAgainst = stats.goalsAgainst;
-        char matchResult = stats.matchResult;
-        String position = stats.position;
-
         final String GOALKEEPER_STRING = "PORTERO";
         final String DEFENCE_STRING = "DEFENSA";
         final String MIDFIELDER_STRING = "MEDIO";
         final String FORWARD_STRING = "DELANTERO";
+        
+        int result = 0;
 
-        result += calculateMinutesPlayed(minutes);
-        result += calculateYellowCard(yellowCard);
-        result += calculateRedCard(redCard);
-        result += calculateMatchResult(matchResult);
-        switch (position) {
+        result += calculateMinutesPlayed(stats.minutes);
+        result += calculateYellowCard(stats.yellowCard);
+        result += calculateRedCard(stats.redCard);
+        result += calculateMatchResult(stats.matchResult);
+        switch (stats.position) {
             case GOALKEEPER_STRING:
-                result += calculateGoals(goals);
-                result += calculateAssists(assists);
-                result += calculateSaves(saves);
-                result += calculateGoalsReceived(goalsAgainst);
+                result += calculateGoalkeeperPoints(stats);
                 break;
             case DEFENCE_STRING:
-                result += calculateGoalsReceived(goalsAgainst);
-                result += calculateGoals(goals);
-                result += calculateAssists(assists);
+                result += calculateDefencePoints(stats);
                 break;
             case MIDFIELDER_STRING:
-                result += calculateGoals(goals);
-                result += calculateAssists(assists);
+                result += calculateMidfielderPoints(stats);
                 break;
             case FORWARD_STRING:
-                result += calculateGoalsForward(goals);
-                result += calculateAssistsForward(assists);
+                result += calculateForwardPoints(stats);
                 break;
             default:
                 break;
         }
 
         return result;
+    }
+
+    private static int calculateForwardPoints(PlayerStats stats) {
+        return calculateGoalsForward(stats.goals)
+                + calculateAssistsForward(stats.assists);
+    }
+
+    private static int calculateMidfielderPoints(PlayerStats stats) {
+        return calculateGoals(stats.goals)
+                + calculateAssists(stats.assists);
+    }
+
+    private static int calculateDefencePoints(PlayerStats stats) {
+        return calculateGoalsReceived(stats.goalsAgainst) 
+                + calculateGoals(stats.goals)
+                + calculateAssists(stats.assists);
+    }
+
+    private static int calculateGoalkeeperPoints(PlayerStats stats) {
+        return calculateGoals(stats.goals)
+                + calculateAssists(stats.assists)
+                + calculateSaves(stats.saves)
+                + calculateGoalsReceived(stats.goalsAgainst);
+    }
+
+    private static int calculateCommonPoints(PlayerStats stats) {
+        return calculateMinutesPlayed(stats.minutes)
+                + calculateYellowCard(stats.yellowCard)
+                + calculateRedCard(stats.redCard)
+                + calculateMatchResult(stats.matchResult);
     }
 
     private static int calculateAssistsForward(int assists) {
