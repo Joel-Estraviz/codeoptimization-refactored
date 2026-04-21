@@ -14,35 +14,41 @@ import es.dam.codeoptimization.PlayerStats;
 public class FantasyCalculator {
 
     public static int calculatePoints(PlayerStats stats) {
+        return calculateCommonPoints(stats) 
+                + calculatePointsByPosition(stats);
+    }
+
+    private static int calculatePointsByPosition(PlayerStats stats) {
         final String GOALKEEPER_STRING = "PORTERO";
         final String DEFENCE_STRING = "DEFENSA";
         final String MIDFIELDER_STRING = "MEDIO";
         final String FORWARD_STRING = "DELANTERO";
+        int points = 0;
         
-        int result = 0;
-
-        result += calculateMinutesPlayed(stats.minutes);
-        result += calculateYellowCard(stats.yellowCard);
-        result += calculateRedCard(stats.redCard);
-        result += calculateMatchResult(stats.matchResult);
         switch (stats.position) {
             case GOALKEEPER_STRING:
-                result += calculateGoalkeeperPoints(stats);
+                points = calculateGoalkeeperPoints(stats);
                 break;
             case DEFENCE_STRING:
-                result += calculateDefencePoints(stats);
+                points = calculateDefencePoints(stats);
                 break;
             case MIDFIELDER_STRING:
-                result += calculateMidfielderPoints(stats);
+                points = calculateMidfielderPoints(stats);
                 break;
             case FORWARD_STRING:
-                result += calculateForwardPoints(stats);
+                points = calculateForwardPoints(stats);
                 break;
             default:
                 break;
         }
+        return points;
+    }
 
-        return result;
+    private static int calculateCommonPoints(PlayerStats stats) {
+        return calculateMinutesPlayed(stats.minutes)
+                + calculateYellowCard(stats.yellowCard)
+                + calculateRedCard(stats.redCard)
+                + calculateMatchResult(stats.matchResult);
     }
 
     private static int calculateForwardPoints(PlayerStats stats) {
@@ -66,13 +72,6 @@ public class FantasyCalculator {
                 + calculateAssists(stats.assists)
                 + calculateSaves(stats.saves)
                 + calculateGoalsReceived(stats.goalsAgainst);
-    }
-
-    private static int calculateCommonPoints(PlayerStats stats) {
-        return calculateMinutesPlayed(stats.minutes)
-                + calculateYellowCard(stats.yellowCard)
-                + calculateRedCard(stats.redCard)
-                + calculateMatchResult(stats.matchResult);
     }
 
     private static int calculateAssistsForward(int assists) {
