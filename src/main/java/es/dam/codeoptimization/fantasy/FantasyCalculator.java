@@ -12,8 +12,7 @@ import es.dam.codeoptimization.PlayerStats;
 public class FantasyCalculator {
 
     public static int calculatePoints(PlayerStats stats) {
-        int result = 0; 
-        
+        int result = 0;         
         int minutes = stats.minutes;
         int goals = stats.goals;
         int assists = stats.assists;
@@ -23,32 +22,37 @@ public class FantasyCalculator {
         int goalsAgainst = stats.goalsAgainst;
         char matchResult = stats.matchResult;
         String position = stats.position;
+        
+        final String GOALKEEPER_STRING = "PORTERO";
+        final String DEFENCE_STRING = "DEFENSA";
+        final String MIDFIELDER_STRING = "MEDIO";
+        final String FORWARD_STRING = "DELANTERO";
 
-        if (position.equals("PORTERO")) {
+        if (position.equals(GOALKEEPER_STRING)) {
             result = calculateMinutesPlayed(minutes, result);
             result = calculateGoals(goals, result);
             result = calculateAssists(result, assists);
             result = calculateSaves(result, saves);            
-            result = calculateGoalsAgainst(goalsAgainst, result);
+            result = calculateGoalsReceived(goalsAgainst, result);
             result = calculateYellowCard(yellowCard, result); 
             result = calculateRedCard(redCard, result);            
             result = calculateMatchResult(matchResult, result);
-        } else if (position.equals("DEFENSA")) {
+        } else if (position.equals(DEFENCE_STRING)) {
             result = calculateMinutesPlayed(minutes, result);
             result = calculateGoals(goals, result);
             result = calculateAssists(result, assists);
-            result = calculateGoalsAgainst(goalsAgainst, result);
+            result = calculateGoalsReceived(goalsAgainst, result);
             result = calculateYellowCard(yellowCard, result);
             result = calculateRedCard(redCard, result);            
             result = calculateMatchResult(matchResult, result);
-        } else if (position.equals("MEDIO")) {
+        } else if (position.equals(MIDFIELDER_STRING)) {
             result = calculateMinutesPlayed(minutes, result);
             result = calculateGoals(goals, result);
             result = calculateAssists(result, assists);
             result = calculateYellowCard(yellowCard, result);
             result = calculateRedCard(redCard, result);            
             result = calculateMatchResult(matchResult, result);
-        } else if (position.equals("DELANTERO")) {
+        } else if (position.equals(FORWARD_STRING)) {
             result = calculateMinutesPlayed(minutes, result);
             result = calculateGoalsForward(goals, result);
             result = calculateAssistsForward(result, assists);
@@ -61,69 +65,96 @@ public class FantasyCalculator {
     }
 
     private static int calculateAssistsForward(int result, int assists) {
-        result = result + (assists * 5);
+        final int POINTS_PER_ASSIST = 5;
+        
+        result = result + (assists * POINTS_PER_ASSIST);
         return result;
     }
 
     private static int calculateAssists(int result, int assists) {
-        result = result + (assists * 6);
+        final int POINTS_PER_ASSIST = 6;
+        
+        result = result + (assists * POINTS_PER_ASSIST);
         return result;
     }
 
     private static int calculateSaves(int result, int saves) {
-        result = result + saves;
+        final int POINTS_PER_SAVE = 1;
+        
+        result = result + saves * POINTS_PER_SAVE;
         return result;
     }
 
     private static int calculateGoalsForward(int goals, int result) {
+        final int POINTS_PER_GOAL = 6;
+        
         for (int i = 0; i < goals; i++) {
-            result = result + 6;
+            result = result + POINTS_PER_GOAL;
         }
         return result;
     }
 
     private static int calculateMatchResult(char matchResult, int result) {
-        if (matchResult == 'G') {
-            result = result + 5;
-        } else if (matchResult == 'E') {
-            result = result + 2;
+        final char MATCH_WON = 'G';
+        final char MATCH_DRAW = 'E';
+        final int POINTS_FOR_WINNING_MATCH = 5;
+        final int POINTS_FOR_DRAWING_MATCH = 2;
+        
+        if (matchResult == MATCH_WON) {
+            result = result + POINTS_FOR_WINNING_MATCH;
+        } else if (matchResult == MATCH_DRAW) {
+            result = result + POINTS_FOR_DRAWING_MATCH;
         }
         return result;
     }
 
     private static int calculateRedCard(boolean redCard, int result) {
-        if (redCard == true) result = result - 5;
+        final int POINTS_FOR_RED_CARD = -5;
+        
+        if (redCard == true) result = result + POINTS_FOR_RED_CARD;
         return result;
     }
 
     private static int calculateYellowCard(boolean yellowCard, int result) {
-        if (yellowCard == true) result = result - 3;
+        final int POINTS_FOR_YELLOW_CARD = -3;
+        
+        if (yellowCard == true) result = result + POINTS_FOR_YELLOW_CARD;
         return result;
     }
 
-    private static int calculateGoalsAgainst(int goalsAgainst, int result) {
+    private static int calculateGoalsReceived(int goalsAgainst, int result) {
+        final int POINTS_FOR_ZERO_GOALS_RECEIVED = 5;
+        final int POINTS_FOR_ONE_GOAL_RECEIVED = 3;
+        final int POINTS_FOR_TWO_GOALS_RECEIVED = 1;
+        
         if (goalsAgainst == 0) {
-            result = result + 5;
+            result = result + POINTS_FOR_ZERO_GOALS_RECEIVED;
         } else if (goalsAgainst == 1) {
-            result = result + 3;
+            result = result + POINTS_FOR_ONE_GOAL_RECEIVED;
         } else if (goalsAgainst == 2) {
-            result = result + 1;
+            result = result + POINTS_FOR_TWO_GOALS_RECEIVED;
         }
         return result;
     }
 
     private static int calculateGoals(int goals, int result) {
+        final int POINTS_PER_GOAL = 5;
+        
         for (int i = 0; i < goals; i++) {
-            result = result + 5;
+            result = result + POINTS_PER_GOAL;
         }
         return result;
     }
 
     private static int calculateMinutesPlayed(int minutes, int result) {
-        if (minutes > 0 && minutes < 60) {
-            result = result + 3;
-        } else if (minutes >= 60) {
-            result = result + 5;
+        final int POINTS_PLAYED_SOME_MINUTES = 3;
+        final int POINTS_PLAYED_MOST_MINUTES = 5;
+        final int MINUTES_LIMIT_FOR_MOST_MINUTES = 60;
+        
+        if (minutes > 0 && minutes < MINUTES_LIMIT_FOR_MOST_MINUTES) {
+            result = result + POINTS_PLAYED_SOME_MINUTES;
+        } else if (minutes >= MINUTES_LIMIT_FOR_MOST_MINUTES) {
+            result = result + POINTS_PLAYED_MOST_MINUTES;
         }
         return result;
     }
