@@ -7,17 +7,27 @@ package es.dam.codeoptimization.fantasy;
 import es.dam.codeoptimization.PlayerStats;
 
 /**
- * THE CLASS YOU HAVE TO MODIFY
+ * Esta clase realiza los cálculos de cuantos puntos recibirá el jugador en función de sus características (posición, tarjetas rojas o amarillas, goles...).
  *
- * @author Boris
+ * @author Joel Estraviz Nogueiro
  */
 public class FantasyCalculator {
 
+    /**
+     * Recibe las características del jugador y calcula sus puntos
+     * @param stats las características del jugador
+     * @return Retorna los puntos totales ddel jugador
+     */
     public static int calculatePoints(PlayerStats stats) {
         return calculateCommonPoints(stats) 
                 + calculatePointsByPosition(stats);
     }
 
+    /**
+     * Calcula los puntos del jugador que dependen de su posición
+     * @param stats
+     * @return Devuelve los puntos dependientes de la posición
+     */
     private static int calculatePointsByPosition(PlayerStats stats) {
         final String GOALKEEPER_STRING = "PORTERO";
         final String DEFENCE_STRING = "DEFENSA";
@@ -44,6 +54,11 @@ public class FantasyCalculator {
         return points;
     }
 
+    /**
+     * Calcula los puntos que no dependen de la posición del jugador
+     * @param stats
+     * @return Puntos no dependientes de la posición
+     */
     private static int calculateCommonPoints(PlayerStats stats) {
         return calculateMinutesPlayed(stats.minutes)
                 + calculateYellowCard(stats.yellowCard)
