@@ -43,10 +43,10 @@ public class FantasyCalculator {
                 points = calculateDefencePoints(stats);
                 break;
             case MIDFIELDER_STRING:
-                points = calculateMidfielderPoints(stats);
+                points = 0;
                 break;
             case FORWARD_STRING:
-                points = calculateForwardPoints(stats);
+                points = 0;
                 break;
             default:
                 break;
@@ -63,29 +63,17 @@ public class FantasyCalculator {
         return calculateMinutesPlayed(stats.minutes)
                 + calculateYellowCard(stats.yellowCard)
                 + calculateRedCard(stats.redCard)
-                + calculateMatchResult(stats.matchResult);
-    }
-
-    private static int calculateForwardPoints(PlayerStats stats) {
-        return calculateGoals(stats.goals)
-                + calculateAssists(stats.assists);
-    }
-
-    private static int calculateMidfielderPoints(PlayerStats stats) {
-        return calculateGoals(stats.goals)
-                + calculateAssists(stats.assists);
-    }
-
-    private static int calculateDefencePoints(PlayerStats stats) {
-        return calculateGoalsReceived(stats.goalsAgainst) 
+                + calculateMatchResult(stats.matchResult)
                 + calculateGoals(stats.goals)
                 + calculateAssists(stats.assists);
     }
 
+    private static int calculateDefencePoints(PlayerStats stats) {
+        return calculateGoalsReceived(stats.goalsAgainst);
+    }
+
     private static int calculateGoalkeeperPoints(PlayerStats stats) {
-        return calculateGoals(stats.goals)
-                + calculateAssists(stats.assists)
-                + calculateSaves(stats.saves)
+        return calculateSaves(stats.saves)
                 + calculateGoalsReceived(stats.goalsAgainst);
     }
 
